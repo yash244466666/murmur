@@ -2,9 +2,53 @@
 
 This project, "Murmur", is a web application similar to Twitter/X, allowing users to post "murmurs" (tweets), follow other users, and like murmurs. It has been developed as a coding test for a Ruby/Rails engineer position.
 
-## Project Status (as of August 21, 2025)
+## Project Status (as of August 22, 2025)
 
-This project fulfills most of the core requirements outlined in the coding test instructions. Key features like user authentication, posting murmurs, following/unfollowing users, liking/unliking murmurs, user profiles, and a personal timeline are implemented for both a web interface and a JSON API.
+This project fulfills all core requirements outlined in the coding test instructions and now includes a **modern Next.js frontend** in addition to the original Rails web interface. Key features like user authentication, posting murmurs, following/unfollowing users, liking/unliking murmurs, user profiles, and a personal timeline are implemented across three interfaces:
+
+1. **Rails Web Interface** (Original) - Server-rendered HTML with Stimulus JS
+2. **JSON REST API** - Comprehensive API with JWT authentication  
+3. **Next.js Frontend** (New) - Modern React-based SPA with TypeScript
+
+## 🆕 New Next.js Frontend Features
+
+The project now includes a cutting-edge **Next.js 15** frontend application with:
+
+### ✨ Modern Tech Stack
+- **Next.js 15** with App Router
+- **TypeScript** for type safety
+- **Tailwind CSS** for styling
+- **TanStack React Query** for state management
+- **React Hook Form** with Zod validation
+- **Axios** for HTTP requests
+- **Lucide React** for icons
+
+### 🎯 Enhanced User Experience  
+- **Responsive Design** - Mobile-first approach
+- **Real-time Updates** - Optimistic UI updates
+- **Modern UI Components** - Clean, Twitter-like interface
+- **Avatar Integration** - UI Avatars API for profile pictures
+- **Toast Notifications** - User feedback for actions
+- **Loading States** - Smooth UX with skeleton loaders
+
+### 🔐 Advanced Authentication
+- **JWT Token Management** - Secure API authentication
+- **Auto-refresh Tokens** - Seamless session handling
+- **Protected Routes** - Route-based authentication guards
+- **Form Validation** - Client-side validation with server sync
+
+### 📱 Key Pages & Features
+- **Timeline** (`/`) - Infinite scroll feed with real-time updates
+- **User Profiles** (`/profile/[username]`) - Detailed user pages
+- **Authentication** (`/login`, `/signup`) - Modern auth flows
+- **Responsive Navigation** - Mobile-friendly sidebar and top nav
+- **Following Lists** - View followers/following with follow buttons
+
+### 🚀 Performance Optimized
+- **Server Components** - Next.js 15 optimizations
+- **Image Optimization** - Next.js Image component
+- **Code Splitting** - Automatic route-based splitting
+- **Caching Strategy** - React Query with background updates
 
 ## 🚀 Quick Start with Docker (Recommended)
 
@@ -38,9 +82,29 @@ The easiest way to run this project is using Docker. No need to install Ruby, No
    ```
 
 4. **View the application:**
-   - **Main App**: http://localhost:3000
+   - **Rails Web App**: http://localhost:3000
+   - **Next.js Frontend**: http://localhost:3001  
    - **API Documentation**: http://localhost:3000/api-docs
    - **Database Admin (phpMyAdmin)**: http://localhost:8080
+
+### Next.js Frontend Setup
+
+The modern Next.js frontend is located in the `nextjs-frontend/` directory and runs independently:
+
+```bash
+# Start the Next.js frontend (in a new terminal)
+cd nextjs-frontend
+npm install
+npm run dev
+
+# Access at http://localhost:3001
+```
+
+**Frontend Environment Setup:**
+Create `nextjs-frontend/.env.local`:
+```bash
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+```
 
 ### Useful Docker Commands
 
@@ -100,7 +164,9 @@ The goal was to implement a web application with the following specifications:
 
 **Technical Stack:**
 - Ruby 3.x or later
+- TypeScript
 - Ruby on Rails 4.x or later
+- Next.JS
 - MySQL
 - Webpack
 - Tailwind CSS
@@ -158,23 +224,39 @@ The goal was to implement a web application with the following specifications:
 
 ## Technologies Used in This Project
 
+### Backend Stack
 - **Backend:** Ruby 3.4.3, Rails 8.0.2
 - **Database:** MySQL
-- **Frontend:**
-    - HTML (ERB)
-    - Tailwind CSS
-    - JavaScript (ES6+)
-    - Stimulus JS
-    - Hotwire/Turbo (implied)
-    - Toastify JS (for notifications)
-    - `importmap-rails` for JS module management
-    - `jsbundling-rails` (with esbuild) for JS bundling
 - **API Documentation:** Rswag (Swagger)
 - **Authentication:** Custom JWT for API, Rails sessions for Web
 - **Pagination:** Kaminari gem
 - **Testing:** RSpec, FactoryBot
-- **Containerization:** Docker, Docker Compose
 - **Linters/Formatters:** RuboCop, Brakeman (security scanner)
+
+### Frontend Stacks
+
+#### Next.js Frontend (Modern SPA)
+- **Framework:** Next.js 15 with App Router
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS  
+- **State Management:** TanStack React Query
+- **Form Handling:** React Hook Form with Zod validation
+- **HTTP Client:** Axios with interceptors
+- **Icons:** Lucide React
+- **Avatar Service:** UI Avatars API
+- **Build Tool:** Built-in Next.js compiler
+
+#### Rails Frontend (Original)
+- **Templates:** HTML (ERB)
+- **Styling:** Tailwind CSS
+- **JavaScript:** ES6+ with Stimulus JS
+- **Bundling:** `importmap-rails`, `jsbundling-rails` (esbuild)
+- **Interactivity:** Hotwire/Turbo
+- **Notifications:** Toastify JS
+
+### Infrastructure
+- **Containerization:** Docker, Docker Compose
+- **Development:** Hot reload for both Rails and Next.js
 
 ## Setup and Installation
 
@@ -240,13 +322,24 @@ That's it! The Docker setup handles all dependencies, database setup, and asset 
 
    The application will be available at `http://localhost:3000`
 
-## Key Page Links
+## Key Application Links
 
+### Rails Web Interface
 - **Timeline (Root):** `http://localhost:3000/`
 - **Sign Up:** `http://localhost:3000/signup`
 - **Login:** `http://localhost:3000/login`
 - **User Profile:** `http://localhost:3000/@username` (e.g., `http://localhost:3000/@john_doe`)
+
+### Next.js Frontend
+- **Timeline:** `http://localhost:3001/`
+- **Login:** `http://localhost:3001/login`
+- **Sign Up:** `http://localhost:3001/signup`
+- **User Profile:** `http://localhost:3001/profile/username` (e.g., `http://localhost:3001/profile/john_doe`)
+- **Following List:** `http://localhost:3001/profile/username/following`
+
+### API & Documentation
 - **API Documentation:** `http://localhost:3000/api-docs`
+- **Database Admin:** `http://localhost:8080` (phpMyAdmin)
 
 ## Default Test Users (Created via Seeds)
 
@@ -258,13 +351,49 @@ After running `db:seed` or starting with Docker, you can log in with:
 
 ## Development Workflow
 
-### Running Tests
+### Running Both Frontends
+
+#### Option 1: Rails Only (Original)
 ```bash
 # With Docker
-make test
+make up
 
 # Local setup
+rails server
+# Visit http://localhost:3000
+```
+
+#### Option 2: Next.js Frontend + Rails API
+```bash
+# Terminal 1: Start Rails API
+make up  # or rails server
+
+# Terminal 2: Start Next.js frontend  
+cd nextjs-frontend
+npm run dev
+# Visit http://localhost:3001
+```
+
+#### Option 3: Full Development Setup
+```bash
+# Start all services with hot reload
+make dev  # Rails + Docker services
+
+# In another terminal
+cd nextjs-frontend && npm run dev  # Next.js frontend
+```
+
+### Running Tests
+```bash
+# Rails tests (with Docker)
+make test
+
+# Rails tests (local setup)
 bundle exec rspec
+
+# Next.js tests (if implemented)
+cd nextjs-frontend
+npm test
 ```
 
 ### API Documentation
@@ -525,19 +654,62 @@ bundle exec rspec
 
 ```
 murmur/
-├── app/
-│   ├── controllers/     # API and web controllers
-│   ├── models/         # ActiveRecord models
-│   ├── views/          # ERB templates
-│   ├── javascript/     # Stimulus controllers
-│   └── assets/         # Stylesheets and images
-├── config/             # Rails configuration
-├── db/                # Database migrations and seeds
-├── spec/              # RSpec tests
-├── public/api-docs/   # Generated API documentation
-├── docker-compose.yml # Docker services configuration
-├── Dockerfile.dev     # Development Docker image
-└── Makefile          # Convenience commands
+├── app/                    # Rails application
+│   ├── controllers/        # API and web controllers
+│   ├── models/            # ActiveRecord models
+│   ├── views/             # ERB templates (Rails frontend)
+│   ├── javascript/        # Stimulus controllers
+│   └── assets/            # Stylesheets and images
+├── nextjs-frontend/       # Next.js frontend application
+│   ├── src/
+│   │   ├── app/           # Next.js 15 App Router pages
+│   │   ├── components/    # React components
+│   │   ├── contexts/      # React contexts (Auth, etc.)
+│   │   ├── hooks/         # Custom React hooks
+│   │   ├── lib/           # Utilities and API client
+│   │   └── types/         # TypeScript type definitions
+│   ├── public/            # Static assets
+│   ├── tailwind.config.js # Tailwind configuration
+│   └── package.json       # Node.js dependencies
+├── config/                # Rails configuration
+├── db/                   # Database migrations and seeds
+├── spec/                 # RSpec tests
+├── public/api-docs/      # Generated API documentation
+├── docker-compose.yml    # Docker services configuration
+├── Dockerfile.dev        # Development Docker image
+└── Makefile             # Convenience commands
+```
+
+### Next.js Frontend Architecture
+
+```
+nextjs-frontend/src/
+├── app/                   # App Router (Next.js 15)
+│   ├── (auth)/           # Auth layout group
+│   │   ├── login/        # Login page
+│   │   └── signup/       # Signup page
+│   ├── profile/          # User profile pages
+│   │   └── [username]/   # Dynamic user routes
+│   ├── globals.css       # Global styles
+│   ├── layout.tsx        # Root layout
+│   └── page.tsx          # Home/Timeline page
+├── components/            # Reusable React components
+│   ├── auth/             # Authentication components
+│   ├── murmurs/          # Murmur-related components
+│   ├── ui/               # UI components (buttons, forms)
+│   └── users/            # User-related components
+├── contexts/             # React Context providers
+│   └── AuthContext.tsx   # Authentication state
+├── hooks/                # Custom React hooks
+│   ├── useAuth.ts        # Authentication hooks
+│   ├── useMurmurs.ts     # Murmur management hooks
+│   └── useUsers.ts       # User management hooks
+├── lib/                  # Utilities and configurations
+│   ├── api-client.ts     # API client with Axios
+│   ├── api.ts            # Axios configuration
+│   └── utils.ts          # Utility functions
+└── types/                # TypeScript definitions
+    └── index.ts          # API response types
 ```
 
 ## Docker Services
@@ -579,14 +751,41 @@ When using Docker, these are set automatically:
 
 ## Summary
 
-This Twitter clone provides a complete social media experience with:
+This Twitter clone now provides **two complete frontend experiences** plus a comprehensive API:
 
+### 🎯 Three-Tier Architecture
+✅ **Rails Web Interface**: Traditional server-rendered HTML with Stimulus  
+✅ **Next.js Frontend**: Modern React SPA with TypeScript  
+✅ **REST API**: Complete JSON API with JWT authentication
+
+### 🚀 Enhanced Features
+✅ **Dual Authentication**: JWT for API, Sessions for Rails web  
+✅ **Modern UI/UX**: Responsive design with Tailwind CSS  
+✅ **Real-time Updates**: Optimistic UI with React Query  
+✅ **Type Safety**: Full TypeScript integration  
+✅ **Mobile-First**: Responsive design across all screen sizes  
+
+### 📱 Complete Social Media Experience
 ✅ **Core Features**: User auth, posting, following, liking, timelines  
-✅ **Modern Tech Stack**: Rails 8, MySQL, Tailwind CSS, Stimulus  
-✅ **API-First Design**: Full REST API with Swagger documentation  
-✅ **Easy Deployment**: Docker containerization with one-command setup  
-✅ **Test Coverage**: RSpec test suite with API documentation generation  
-✅ **Production Ready**: Optimized Docker builds, security best practices
+✅ **User Profiles**: Detailed profiles with follower/following lists  
+✅ **Avatar System**: Integrated UI Avatars for profile pictures  
+✅ **Modern Navigation**: Sidebar navigation with user context  
+✅ **Form Validation**: Client and server-side validation  
 
-**Getting Started**: Just run `./start.sh` and visit http://localhost:3000 🚀
+### 🛠️ Developer Experience  
+✅ **Easy Setup**: Docker containerization with one-command setup  
+✅ **Hot Reload**: Both Rails and Next.js development servers  
+✅ **API Documentation**: Interactive Swagger documentation  
+✅ **Test Coverage**: RSpec test suite with factory patterns  
+✅ **Type Safety**: TypeScript for frontend development  
+
+### 🏗️ Production Ready
+✅ **Docker Deployment**: Optimized containers for production  
+✅ **Security Best Practices**: JWT tokens, CORS, input validation  
+✅ **Performance Optimized**: Code splitting, caching, optimized images  
+✅ **Scalable Architecture**: Separate frontend and API services  
+
+**Getting Started**: 
+- **Rails Only**: Run `./start.sh` and visit http://localhost:3000 🚀  
+- **Modern Stack**: Run `make up` + `cd nextjs-frontend && npm run dev` and visit http://localhost:3001 ✨
 
