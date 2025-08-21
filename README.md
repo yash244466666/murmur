@@ -10,7 +10,7 @@ This project fulfills all core requirements outlined in the coding test instruct
 2. **JSON REST API** - Comprehensive API with JWT authentication  
 3. **Next.js Frontend** (New) - Modern React-based SPA with TypeScript
 
-## 🆕 New Next.js Frontend Features
+## Next.js Frontend Features
 
 The project now includes a cutting-edge **Next.js 15** frontend application with:
 
