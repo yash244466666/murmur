@@ -30,16 +30,21 @@ export default function LoginPage() {
     });
 
     useEffect(() => {
+        console.log('🔍 LoginPage: Auth state changed - isAuthenticated:', isAuthenticated);
         if (isAuthenticated) {
+            console.log('✅ LoginPage: User is authenticated, redirecting to home');
             router.push('/');
         }
     }, [isAuthenticated, router]);
 
     const onSubmit = async (data: LoginForm) => {
         try {
+            console.log('🔐 LoginPage: Starting login with email:', data.email);
             setError('');
             await loginMutation.mutateAsync(data);
+            console.log('✅ LoginPage: Login mutation completed successfully');
         } catch (err: unknown) {
+            console.error('🚨 LoginPage: Login failed:', err);
             const error = err as { response?: { data?: { error?: string } } };
             setError(error.response?.data?.error || 'Login failed');
         }

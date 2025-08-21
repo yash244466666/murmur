@@ -47,13 +47,24 @@ export default function SignupPage() {
     const onSubmit = async (data: SignupForm) => {
         try {
             setError('');
+            console.log('🔐 Signup: Attempting to create user:', data.username);
             await signupMutation.mutateAsync(data);
         } catch (err: unknown) {
-            const error = err as { response?: { data?: { error?: string; errors?: string[] } } };
+            console.error('🚨 Signup: Registration failed:', err);
+            const error = err as {
+                response?: {
+                    data?: {
+                        error?: string;
+                        errors?: string[]
+                    }
+                }
+            };
             if (error.response?.data?.errors) {
                 setError(error.response.data.errors.join(', '));
+            } else if (error.response?.data?.error) {
+                setError(error.response.data.error);
             } else {
-                setError(error.response?.data?.error || 'Signup failed');
+                setError('Signup failed. Please try again.');
             }
         }
     };

@@ -8,14 +8,24 @@ export function useTimeline() {
 
   return useQuery<TimelineResponse, Error>({
     queryKey: ["timeline"],
-    queryFn: murmursApi.getTimeline,
+    queryFn: async () => {
+      console.log("📰 useTimeline: Fetching timeline data");
+      const result = await murmursApi.getTimeline();
+      console.log(
+        "✅ useTimeline: Timeline data received, murmurs:",
+        result.murmurs.length
+      );
+      return result;
+    },
     enabled: isAuthenticated,
     retry: (failureCount, error: Error) => {
       // Don't retry on 401 errors
       const axiosError = error as { response?: { status: number } };
       if (axiosError?.response?.status === 401) {
+        console.log("🚨 useTimeline: 401 error, not retrying");
         return false;
       }
+      console.log("🔄 useTimeline: Retrying, attempt:", failureCount);
       return failureCount < 3;
     },
   });

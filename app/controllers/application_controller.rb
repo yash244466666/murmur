@@ -19,11 +19,19 @@ class ApplicationController < ActionController::Base
     
     if session[:user_id]
       @current_user = User.find_by(id: session[:user_id])
+      Rails.logger.info "🔍 ApplicationController: Found user via session: #{@current_user&.username}"
     elsif (header = request.headers['Authorization'])
+      Rails.logger.info "🔍 ApplicationController: Authorization header found: #{header}"
       token = header.split(' ').last
+      Rails.logger.info "🔍 ApplicationController: Extracted token: #{token[0..20]}..."
       decoded = JsonWebToken.decode(token)
+      Rails.logger.info "🔍 ApplicationController: Decoded token: #{decoded}"
       @current_user = User.find_by(id: decoded[:user_id]) if decoded
+      Rails.logger.info "🔍 ApplicationController: Found user via JWT: #{@current_user&.username}"
     end
+    
+    Rails.logger.info "🔍 ApplicationController: Final current_user: #{@current_user&.username}"
+    @current_user
   end
 
   def user_signed_in?

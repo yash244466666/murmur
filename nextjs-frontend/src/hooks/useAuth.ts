@@ -9,15 +9,31 @@ export function useLogin() {
   const router = useRouter();
 
   return useMutation<AuthResponse, Error, LoginForm>({
-    mutationFn: authApi.login,
+    mutationFn: async (credentials) => {
+      console.log(
+        "🔐 useLogin: Starting API call with email:",
+        credentials.email
+      );
+      const result = await authApi.login(credentials);
+      console.log(
+        "✅ useLogin: API call successful, token received:",
+        !!result.token
+      );
+      return result;
+    },
     onSuccess: (data) => {
-      console.log("Login successful, user data:", data);
+      console.log(
+        "✅ useLogin: Login successful, user data:",
+        data.user.username
+      );
+      console.log("🔐 useLogin: Calling AuthContext login");
       login(data.user, data.token);
+      console.log("🔄 useLogin: Redirecting to home page");
       // Use replace instead of push to prevent back navigation to login
       router.replace("/");
     },
     onError: (error) => {
-      console.error("Login failed:", error);
+      console.error("🚨 useLogin: Login failed:", error);
     },
   });
 }

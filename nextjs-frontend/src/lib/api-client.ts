@@ -19,7 +19,7 @@ export const authApi = {
   },
 
   signup: async (userData: SignupForm): Promise<AuthResponse> => {
-    const response = await api.post("/users", userData);
+    const response = await api.post("/users", { user: userData });
     return response.data;
   },
 };
