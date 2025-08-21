@@ -10,51 +10,42 @@
 #
 # Create test users
 puts "Creating users..."
-user1 = User.create!(
-  username: "john_doe",
-  email: "john@example.com",
-  password: "password123",
-  bio: "Just a regular guy tweeting about life"
-)
+user1 = User.find_or_create_by!(username: "john_doe") do |user|
+  user.email = "john@example.com"
+  user.password = "password123"
+  user.bio = "Just a regular guy tweeting about life"
+end
 
-user2 = User.create!(
-  username: "jane_smith",
-  email: "jane@example.com",
-  password: "password123",
-  bio: "Tech enthusiast and coffee lover"
-)
+user2 = User.find_or_create_by!(username: "jane_smith") do |user|
+  user.email = "jane@example.com"
+  user.password = "password123"
+  user.bio = "Tech enthusiast and coffee lover"
+end
 
-user3 = User.create!(
-  username: "bob_wilson",
-  email: "bob@example.com",
-  password: "password123",
-  bio: "Professional cloud watcher"
-)
+user3 = User.find_or_create_by!(username: "bob_wilson") do |user|
+  user.email = "bob@example.com"
+  user.password = "password123"
+  user.bio = "Professional cloud watcher"
+end
 
 # Create some murmurs
 puts "Creating murmurs..."
-murmur1 = user1.murmurs.create!(
-  content: "Hello world! This is my first murmur!"
-)
+murmur1 = user1.murmurs.find_or_create_by!(content: "Hello world! This is my first murmur!")
 
-murmur2 = user2.murmurs.create!(
-  content: "Just learned something new about Ruby on Rails!"
-)
+murmur2 = user2.murmurs.find_or_create_by!(content: "Just learned something new about Ruby on Rails!")
 
-murmur3 = user3.murmurs.create!(
-  content: "Beautiful day for coding!"
-)
+murmur3 = user3.murmurs.find_or_create_by!(content: "Beautiful day for coding!")
 
 # Create follow relationships
 puts "Creating follow relationships..."
-user1.active_follows.create!(followed: user2)
-user2.active_follows.create!(followed: user3)
-user3.active_follows.create!(followed: user1)
+user1.active_follows.find_or_create_by!(followed: user2)
+user2.active_follows.find_or_create_by!(followed: user3)
+user3.active_follows.find_or_create_by!(followed: user1)
 
 # Create some likes
 puts "Creating likes..."
-user1.likes.create!(murmur: murmur2)
-user2.likes.create!(murmur: murmur3)
-user3.likes.create!(murmur: murmur1)
+user1.likes.find_or_create_by!(murmur: murmur2)
+user2.likes.find_or_create_by!(murmur: murmur3)
+user3.likes.find_or_create_by!(murmur: murmur1)
 
 puts "Seed data created successfully!"

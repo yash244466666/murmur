@@ -2,14 +2,85 @@
 
 This project, "Murmur", is a web application similar to Twitter/X, allowing users to post "murmurs" (tweets), follow other users, and like murmurs. It has been developed as a coding test for a Ruby/Rails engineer position.
 
-## Project Status (as of May 20, 2025)
+## Project Status (as of August 21, 2025)
 
 This project fulfills most of the core requirements outlined in the coding test instructions. Key features like user authentication, posting murmurs, following/unfollowing users, liking/unliking murmurs, user profiles, and a personal timeline are implemented for both a web interface and a JSON API.
 
-## Project Demo Video
+## 🚀 Quick Start with Docker (Recommended)
 
-A short video demonstrating the application's features can be found here: (maybe i will remove the video later, but for now it is here)
-[Murmur App Video Demo](https://drive.google.com/file/d/1cYm_koJCKZnLN1qmPIPMmfH05rHXXozV/view?usp=sharing)
+The easiest way to run this project is using Docker. No need to install Ruby, Node.js, or MySQL locally!
+
+### Prerequisites
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+### Start the Application
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd murmur
+   ```
+
+2. **Quick start (automated):**
+   ```bash
+   # One-command setup
+   ./start.sh
+   ```
+
+3. **Manual start:**
+   ```bash
+   # Option 1: Using Docker Compose directly
+   docker-compose up -d
+   
+   # Option 2: Using the provided Makefile
+   make up
+   ```
+
+4. **View the application:**
+   - **Main App**: http://localhost:3000
+   - **API Documentation**: http://localhost:3000/api-docs
+   - **Database Admin (phpMyAdmin)**: http://localhost:8080
+
+### Useful Docker Commands
+
+```bash
+# Build containers
+make build
+
+# Start services and show logs
+make dev
+
+# View logs
+make logs
+
+# Open Rails console
+make console
+
+# Open shell in Rails container
+make shell
+
+# Run tests
+make test
+
+# Stop all services
+make down
+
+# Clean up everything (containers, volumes, etc.)
+make clean
+
+# Restart fresh
+make fresh
+```
+
+### What Docker Setup Includes
+
+- **Rails Application** (Port 3000)
+- **MySQL Database** (Port 3306)
+- **phpMyAdmin** (Port 8080)
+- **Auto-setup**: Database creation, migrations, and seeding
+- **API Documentation**: Pre-generated Swagger docs
+- **Asset Compilation**: Tailwind CSS and JavaScript bundling
 
 ## Application Screenshot
 
@@ -107,39 +178,118 @@ The goal was to implement a web application with the following specifications:
 
 ## Setup and Installation
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <repository-url>
-    cd ti
-    ```
-2.  **Install Ruby and Node.js:** Ensure you have Ruby (3.4.3) and Node.js (>= 16.x) installed.
-3.  **Install dependencies:**
-    ```bash
-    bundle install
-    yarn install # If you have package.json dependencies not managed by importmaps directly
-    ```
-4.  **Database Setup (MySQL):**
-    *   Ensure MySQL server is running.
-    *   Create a user/role in MySQL that matches your `config/database.yml` development settings (or update `database.yml`).
-    *   Create the database, run migrations, and seed data:
-        ```bash
-        rails db:create
-        rails db:migrate
-        rails db:seed
-        ```
-5.  **Start the development server:**
-    ```bash
-    bin/dev
-    ```
-    This will typically start the Rails server and the JavaScript/CSS build processes.
-    The application should be available at `http://localhost:3000`.
+### Method 1: Docker (Recommended) ⚡
+
+**Requirements**: Docker and Docker Compose only
+
+```bash
+# Clone and start
+git clone <repository-url>
+cd murmur
+docker-compose up -d
+
+# Access the app at http://localhost:3000
+```
+
+That's it! The Docker setup handles all dependencies, database setup, and asset compilation automatically.
+
+### Method 2: Local Development Setup 🛠️
+
+**Requirements**: Ruby 3.4.4+, Node.js 16+, MySQL/MariaDB
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd murmur
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   # Install Ruby gems
+   bundle install
+   
+   # Install Node.js packages
+   yarn install
+   ```
+
+3. **Database Setup:**
+   - Ensure MySQL/MariaDB server is running
+   - Update `config/database.yml` with your database credentials
+   - Setup database:
+     ```bash
+     rails db:create
+     rails db:migrate
+     rails db:seed
+     ```
+
+4. **Build assets:**
+   ```bash
+   # Build Tailwind CSS
+   rails tailwindcss:build
+   
+   # Generate API documentation
+   RAILS_ENV=test rails rswag:specs:swaggerize
+   ```
+
+5. **Start the development server:**
+   ```bash
+   rails server
+   # OR use the dev script
+   bin/dev
+   ```
+
+   The application will be available at `http://localhost:3000`
 
 ## Key Page Links
 
 - **Timeline (Root):** `http://localhost:3000/`
 - **Sign Up:** `http://localhost:3000/signup`
 - **Login:** `http://localhost:3000/login`
-- **User Profile:** `http://localhost:3000/@username` (e.g., `http://localhost:3000/@johndoe`)
+- **User Profile:** `http://localhost:3000/@username` (e.g., `http://localhost:3000/@john_doe`)
+- **API Documentation:** `http://localhost:3000/api-docs`
+
+## Default Test Users (Created via Seeds)
+
+After running `db:seed` or starting with Docker, you can log in with:
+
+- **Username**: `john_doe` | **Email**: `john@example.com` | **Password**: `password123`
+- **Username**: `jane_smith` | **Email**: `jane@example.com` | **Password**: `password123`
+- **Username**: `bob_wilson` | **Email**: `bob@example.com` | **Password**: `password123`
+
+## Development Workflow
+
+### Running Tests
+```bash
+# With Docker
+make test
+
+# Local setup
+bundle exec rspec
+```
+
+### API Documentation
+The API is documented using Swagger/OpenAPI and is available at `/api-docs`. To regenerate:
+```bash
+# With Docker
+docker-compose exec web bundle exec rails rswag:specs:swaggerize
+
+# Local setup  
+RAILS_ENV=test rails rswag:specs:swaggerize
+```
+
+### Database Management
+```bash
+# With Docker
+docker-compose exec web bundle exec rails console
+docker-compose exec web bundle exec rails db:migrate
+
+# Access phpMyAdmin at http://localhost:8080
+# User: root, Password: rootpassword
+
+# Local setup
+rails console
+rails db:migrate
+```
 
 ## API Documentation
 
@@ -329,34 +479,82 @@ Authorization: Bearer your-token
 
 ## Development Setup
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   bundle install
-   ```
-3. Setup database:
-   ```bash
-   rails db:create db:migrate db:seed
-   ```
-4. Start the development server:
-   ```bash
-   bin/dev
-   ```
+### Using Docker (Recommended)
+```bash
+git clone <repository-url>
+cd murmur
+make up  # or docker-compose up -d
+```
+
+### Local Development
+```bash
+git clone <repository-url>  
+cd murmur
+bundle install
+yarn install
+rails db:setup
+rails tailwindcss:build
+rails server
+```
 
 ## Running Tests
 
+### With Docker
 ```bash
-rspec
+make test
 ```
 
-## API Documentation Generation
-
-To regenerate the Swagger documentation:
+### Local Setup
 ```bash
-RAILS_ENV=test rails rswag:specs:swaggerize
+bundle exec rspec
 ```
 
-The documentation will be available at `http://localhost:3000/api-docs` when running the server.
+## Technologies Used
+
+- **Backend:** Ruby 3.4.4, Rails 8.0.2
+- **Database:** MySQL 8.0  
+- **Frontend:** HTML (ERB), Tailwind CSS, Stimulus JS, Turbo
+- **JavaScript:** ES6+, esbuild bundling, importmap-rails
+- **API Documentation:** Rswag (Swagger/OpenAPI)
+- **Authentication:** JWT for API, Rails sessions for Web
+- **Testing:** RSpec, FactoryBot
+- **Containerization:** Docker, Docker Compose
+- **Other:** Kaminari (pagination), Toastify (notifications)
+
+## Project Structure
+
+```
+murmur/
+├── app/
+│   ├── controllers/     # API and web controllers
+│   ├── models/         # ActiveRecord models
+│   ├── views/          # ERB templates
+│   ├── javascript/     # Stimulus controllers
+│   └── assets/         # Stylesheets and images
+├── config/             # Rails configuration
+├── db/                # Database migrations and seeds
+├── spec/              # RSpec tests
+├── public/api-docs/   # Generated API documentation
+├── docker-compose.yml # Docker services configuration
+├── Dockerfile.dev     # Development Docker image
+└── Makefile          # Convenience commands
+```
+
+## Docker Services
+
+- **web**: Rails application (port 3000)
+- **db**: MySQL database (port 3307)  
+- **phpmyadmin**: Database administration (port 8080)
+
+## Environment Variables
+
+When using Docker, these are set automatically:
+
+- `DATABASE_HOST=db`
+- `DATABASE_USERNAME=twitter_clone`
+- `DATABASE_PASSWORD=twitter_clone_password`
+- `DATABASE_NAME=twitter_clone_development`
+- `RAILS_ENV=development`
 
 ## Deviation from Requirements
 
@@ -367,6 +565,7 @@ The documentation will be available at `http://localhost:3000/api-docs` when run
 - The application provides a solid foundation for a Twitter-like platform.
 - The API is well-structured and documented with Swagger.
 - The web interface is functional, leveraging Hotwire/Turbo and Stimulus for modern interactivity.
+- **Docker support** makes it easy to run without local setup hassles.
 - **Future Enhancements could include:**
     - Real-time updates (e.g., ActionCable for new murmurs/notifications).
     - More advanced search functionality.
@@ -374,6 +573,20 @@ The documentation will be available at `http://localhost:3000/api-docs` when run
     - Hashtags and mentions.
     - Richer user profiles (e.g., profile pictures, header images).
     - Admin panel.
+    - Mobile app API optimizations.
+    - Redis caching layer.
+    - Background job processing.
 
----
-*This README was last updated on May 20, 2025.*
+## Summary
+
+This Twitter clone provides a complete social media experience with:
+
+✅ **Core Features**: User auth, posting, following, liking, timelines  
+✅ **Modern Tech Stack**: Rails 8, MySQL, Tailwind CSS, Stimulus  
+✅ **API-First Design**: Full REST API with Swagger documentation  
+✅ **Easy Deployment**: Docker containerization with one-command setup  
+✅ **Test Coverage**: RSpec test suite with API documentation generation  
+✅ **Production Ready**: Optimized Docker builds, security best practices
+
+**Getting Started**: Just run `./start.sh` and visit http://localhost:3000 🚀
+

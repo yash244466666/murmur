@@ -8,15 +8,50 @@ services:
       MYSQL_USER: twitter_clone
       MYSQL_PASSWORD: twitter_clone_password
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     command: --default-authentication-plugin=mysql_native_password
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
       interval: 10s
       timeout: 5s
       retries: 5
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - bundle_cache:/usr/local/bundle
+      - node_modules:/app/node_modules
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_HOST=db
+      - DATABASE_USERNAME=twitter_clone
+      - DATABASE_PASSWORD=twitter_clone_password
+      - DATABASE_NAME=twitter_clone_development
+    depends_on:
+      db:
+        condition: service_healthy
+    stdin_open: true
+    tty: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/up"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    command: >
+      bash -c "
+        bundle exec rails db:create db:migrate db:seed &&
+        bundle exec rails tailwindcss:build &&
+        bundle exec rails server -b 0.0.0.0"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -33,3 +68,5 @@ services:
 
 volumes:
   mysql_data:
+  bundle_cache:
+  node_modules:
